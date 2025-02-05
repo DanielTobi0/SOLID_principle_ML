@@ -2,8 +2,6 @@
 ML Models 
 """
 
-from abc import abstractmethod, ABC
-import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from models.base import BaseModel
 
@@ -24,15 +22,14 @@ if __name__ == "__main__":
     from data.cleaner import DefaultFiller, DataCleaner, DefaultColumnSelector
     from data.transformation import (
         LabelEncoderWrapper,
-        StandardScalerWrapper,
         MinMaxScalerWrapper
     )
-    from config.settings import target, data_path
+    from config.settings import TARGET, DATA_PATH
     from data.splitting import DefaultDataSplitting
 
     csv_reader = CSVReader()
     csv_loader = DataLoader(csv_reader)
-    data = csv_loader.load_data(data_path)
+    data = csv_loader.load_data(DATA_PATH)
 
     column_selector = DefaultColumnSelector()
     filler = DefaultFiller()
@@ -48,12 +45,10 @@ if __name__ == "__main__":
         cleaned_data, cleaned_data.columns.tolist()
     )
 
-    # print(target)
-    # print(cleaned_data)
     x_train, x_test, y_train, y_test = DefaultDataSplitting().data_split(
-        cleaned_data, target=target
+        cleaned_data, target=TARGET
     )
-    # print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)
+
     lr = LogisticRegressionWrapper()
     lr.fit(x_train, y_train)
     print(lr.predict(x_test))
