@@ -1,5 +1,5 @@
 """
-following the SOLID priciple, of assigning a single classs to a single task
+following the SOLID principles of assigning a single class to a single task
 """
 
 from abc import ABC, abstractmethod
@@ -11,6 +11,7 @@ from sklearn.impute import SimpleImputer
 
 class ColumnSelector(ABC):
     """abstract class for columns selection"""
+
     @abstractmethod
     def get_categorical_columns(self, df: pd.DataFrame) -> List:
         pass
@@ -47,11 +48,9 @@ class DefaultFiller(MissingValueFiller):
             return df
 
         if strategy == "numerical" and columns:
-            # print(f"numerical columns: {columns}")
             df[columns] = self.num_imputer.fit_transform(df[columns])
-        
+
         elif strategy == "categorical" and columns:
-            # print(f"object columns: {columns}")
             df[columns] = self.cat_imputer.fit_transform(df[columns])
 
         return df
@@ -59,10 +58,10 @@ class DefaultFiller(MissingValueFiller):
 
 class DataCleaner:
     def __init__(
-        self,
-        df: pd.DataFrame,
-        column_selector: ColumnSelector,
-        filler: MissingValueFiller,
+            self,
+            df: pd.DataFrame,
+            column_selector: ColumnSelector,
+            filler: MissingValueFiller,
     ):
         self.df = df
         self.column_selector = column_selector
@@ -80,16 +79,16 @@ class DataCleaner:
 
 
 if __name__ == "__main__":
-    from config.settings import data_path
+    from config.settings import DATA_PATH
     from data.loader import DataLoader, CSVReader
 
     csv_reader = CSVReader()
     csv_loader = DataLoader(csv_reader)
-    data = csv_loader.load_data(data_path)
+    data = csv_loader.load_data(DATA_PATH)
 
-    column_selector = DefaultColumnSelector()
-    filler = DefaultFiller()
+    column_selector_ = DefaultColumnSelector()
+    filler_ = DefaultFiller()
 
-    cleaner = DataCleaner(data, column_selector, filler)
+    cleaner = DataCleaner(data, column_selector_, filler_)
     cleaned_data = cleaner.clean_up()
     print(cleaned_data)
