@@ -49,16 +49,16 @@ class DefaultDataSplitting(DataSplitting):
 
 if __name__ == "__main__":
     from loader import DataLoader, CSVReader
-    from cleaner import DefaultFiller, DataCleaner,DefaultColumnSelector
+    from cleaner import DefaultFiller, DataCleaner, DefaultColumnSelector
     from transformation import (
         LabelEncoderWrapper,
         StandardScalerWrapper,
     )
-    from config.settings import target, data_path
+    from config.settings import TARGET, DATA_PATH
 
     csv_reader = CSVReader()
     csv_loader = DataLoader(csv_reader)
-    data = csv_loader.load_data(data_path)
+    data = csv_loader.load_data(DATA_PATH)
 
     column_selector = DefaultColumnSelector()
     filler = DefaultFiller()
@@ -74,9 +74,7 @@ if __name__ == "__main__":
         cleaned_data, cleaned_data.columns.tolist()
     )
 
-    # print(target)
-    # print(cleaned_data)
-    x_train, x_test, y_train, y_test = DefaultDataSplitting().data_split(
-        cleaned_data, target=target
+    x_train_, x_test_, y_train_, y_test_ = DefaultDataSplitting().data_split(
+        cleaned_data, target=TARGET
     )
-    print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)
+    print(x_train_.shape, x_test_.shape, y_train_.shape, y_test_.shape)
