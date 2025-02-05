@@ -5,7 +5,6 @@ Data transformation, which contains normalization of categorical variables
 from abc import abstractmethod, ABC
 from typing import List
 import pandas as pd
-import numpy as np
 from sklearn.preprocessing import (
     StandardScaler,
     MinMaxScaler,
@@ -14,7 +13,7 @@ from sklearn.preprocessing import (
 
 
 class Scaler(ABC):
-    """Abstract base class for data scalling"""
+    """Abstract base class for data scaling"""
 
     @abstractmethod
     def apply_scaler(self, df: pd.DataFrame, columns: List[str] = None) -> pd.DataFrame:
@@ -27,18 +26,20 @@ class StandardScalerWrapper(Scaler):
         df[columns] = scaler.fit_transform(df[columns])
         return df
 
+
 class MinMaxScalerWrapper(Scaler):
     def apply_scaler(self, df, columns: List[str] = None) -> pd.DataFrame:
         scaler = MinMaxScaler()
         df[columns] = scaler.fit_transform(df[columns])
         return df
 
+
 class Encoder(ABC):
-    """Abstract base class for data scalling"""
+    """Abstract base class for data scaling"""
 
     @abstractmethod
     def apply_encoding(
-        self, df: pd.DataFrame, columns: List[str] = None
+            self, df: pd.DataFrame, columns: List[str] = None
     ) -> pd.DataFrame:
         pass
 
@@ -60,13 +61,13 @@ class GetDummiesWrapper(Encoder):
 
 
 if __name__ == "__main__":
-    from config.settings import data_path
+    from config.settings import DATA_PATH
     from loader import DataLoader, CSVReader
     from cleaner import DefaultFiller, DataCleaner, DefaultColumnSelector
 
     csv_reader = CSVReader()
     csv_loader = DataLoader(csv_reader)
-    data = csv_loader.load_data(data_path)
+    data = csv_loader.load_data(DATA_PATH)
 
     column_selector = DefaultColumnSelector()
     filler = DefaultFiller()
@@ -74,12 +75,10 @@ if __name__ == "__main__":
     cleaner = DataCleaner(data, column_selector, filler)
     cleaned_data = cleaner.clean_up()
 
-    # print(cleaned_data)
-    
     cat_cols = column_selector.get_categorical_columns(data)
     num_cols = column_selector.get_numerical_columns(data)
 
-    encoder = LabelEncoderWrapper().apply_encoding(cleaned_data, cat_cols)
-    scaler = StandardScalerWrapper().apply_scaler(cleaned_data, cleaned_data.columns.tolist())
+    encoder_ = LabelEncoderWrapper().apply_encoding(cleaned_data, cat_cols)
+    scaler_ = StandardScalerWrapper().apply_scaler(cleaned_data, cleaned_data.columns.tolist())
 
     print(cleaned_data)
