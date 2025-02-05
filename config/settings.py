@@ -1,3 +1,2 @@
-data_path = "document_files/raw/Titanic-Dataset.csv" 
-target = "Survived"
-
+DATA_PATH = "document_files/raw/Titanic-Dataset.csv"
+TARGET = "Survived"
