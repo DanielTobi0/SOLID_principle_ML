@@ -7,7 +7,7 @@ import pandas as pd
 
 
 class IDataReader(ABC):
-    """abstraction to load data from file"""
+    """abstraction to load data from a file"""
 
     @abstractmethod
     def read(self, path: str):
@@ -29,7 +29,7 @@ class CSVReader(IDataReader):
 
     
 class ExcelReader(IDataReader):
-    """read excel file"""
+    """read an Excel file"""
 
     def read(self, path: str) -> pd.DataFrame:
         try:
@@ -51,11 +51,8 @@ class DataLoader:
 
 
 if __name__ == "__main__":
-    from config.settings import data_path
-    # data_path = (
-    #     "C:/Users/HomePC/Desktop/learn/SOLID principle ML/data/raw/Titanic-Dataset.csv"
-    # )
+    from config.settings import DATA_PATH
     
     csv_reader = CSVReader()
     csv_loader = DataLoader(csv_reader)
-    print(csv_loader.load_data(data_path))
+    print(csv_loader.load_data(DATA_PATH))
